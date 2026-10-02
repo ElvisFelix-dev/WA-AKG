@@ -83,4 +83,4 @@ volumes:
     name: wa_akg_mysql_data
 
   uploads_data:
-    name: wa_akg_uploads_data
+    name: wa_akg_uploads_data 
