@@ -1,0 +1,86 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: wa-akg-db
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wa_akg}
+
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} --silent"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: wa-akg-app
+    restart: unless-stopped
+
+    ports:
+      - "${PORT:-3000}:3000"
+
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+
+      DATABASE_URL: mysql://root:${MYSQL_ROOT_PASSWORD}@db:3306/${MYSQL_DATABASE:-wa_akg}
+
+      AUTH_SECRET: ${AUTH_SECRET}
+
+      BASE_URL: ${BASE_URL:-http://localhost:3000}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      AUTH_TRUST_HOST: ${AUTH_TRUST_HOST:-true}
+
+      NEXT_PUBLIC_APP_URL: ${BASE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_API_URL: ${BASE_URL:-http://localhost:3000}/api
+
+      APP_NAME: ${APP_NAME:-WA-AKG}
+
+      BAILEYS_LOG_LEVEL: ${BAILEYS_LOG_LEVEL:-error}
+
+      NEXT_PUBLIC_SWAGGER_ENABLED: ${NEXT_PUBLIC_SWAGGER_ENABLED:-true}
+      NEXT_PUBLIC_SWAGGER_USERNAME: ${NEXT_PUBLIC_SWAGGER_USERNAME:-admin}
+      NEXT_PUBLIC_SWAGGER_PASSWORD: ${NEXT_PUBLIC_SWAGGER_PASSWORD}
+
+      TZ: ${TZ:-America/Sao_Paulo}
+      LOCALE: ${LOCALE:-pt-BR}
+
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+
+      MEDIA_STORAGE_PATH: ${MEDIA_STORAGE_PATH:-uploads}
+
+      ENABLE_HEARTBEAT: ${ENABLE_HEARTBEAT:-false}
+      MONITOR_URL: ${MONITOR_URL:-}
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    volumes:
+      - uploads_data:/app/uploads
+
+volumes:
+  mysql_data:
+    name: wa_akg_mysql_data
+
+  uploads_data:
+    name: wa_akg_uploads_data
