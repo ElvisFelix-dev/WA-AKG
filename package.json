@@ -88,8 +88,9 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "wa-sticker-formatter": {
-      "sharp": "$sharp"
-    }
-  }
+  "wa-sticker-formatter": {
+    "sharp": "$sharp"
+  },
+  "whatsapp-rust-bridge": "0.5.5"
+}
 }
