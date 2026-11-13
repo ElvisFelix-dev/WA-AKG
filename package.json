@@ -30,7 +30,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tailwindcss/typography": "^0.5.19",
     "@types/react-syntax-highlighter": "^15.5.13",
-    "@whiskeysockets/baileys": "^7.0.0-rc.9",
+    "@whiskeysockets/baileys": "7.0.0-rc10",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -63,8 +63,8 @@
     "systeminformation": "^5.31.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "wa-sticker-formatter": "^4.4.4",
     "tsx": "^4.21.0",
+    "wa-sticker-formatter": "^4.4.4",
     "zod": "^4.3.5"
   },
   "devDependencies": {
